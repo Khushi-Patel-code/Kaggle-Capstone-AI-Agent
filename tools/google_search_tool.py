@@ -1,16 +1,30 @@
 # tools/google_search_tool.py
 
+import requests
+
 class GoogleSearchTool:
     """
-    A lightweight simulated search tool.
-    Replace with real API calls later if needed.
+    A simple fallback search tool that returns STRUCTURED results.
+    We DO NOT call Google API (Kaggle does not allow).
+    Instead, we simulate search by returning stubbed structured results.
     """
 
-    def search(self, query: str) -> str:
-        # Stubbed response — you may later integrate Serper, Tavily, etc.
-        results = [
-            f"Result 1 for '{query}': Basic explanation found.",
-            f"Result 2 for '{query}': Example-driven tutorial.",
-            f"Result 3 for '{query}': Best practices and tips."
+    def search(self, query: str):
+        """
+        Always returns a LIST of dictionaries.
+        Each item contains:
+         - title
+         - snippet
+        """
+
+        # --- SIMULATED SAFE STRUCTURED RESULT ---
+        return [
+            {
+                "title": f"Background information about {query}",
+                "snippet": f"Overview and background research related to {query}.",
+            },
+            {
+                "title": f"Key insights for {query}",
+                "snippet": f"Important strategies, concepts, and techniques for {query}.",
+            }
         ]
-        return "\n".join(results)

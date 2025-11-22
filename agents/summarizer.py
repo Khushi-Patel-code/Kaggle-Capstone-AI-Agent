@@ -1,40 +1,30 @@
 """
 agents/summarizer.py
-Summarizes multiple research results into a compressed explanation.
-
-Later:
- - Replace with an LLM summarization step using ADK
- - Add compression tools
- - Add academic citation tools
+Summarizes research results.
 """
 
-import logging
-from typing import List, Dict, Any
-
-logger = logging.getLogger("summarizer")
-logger.setLevel(logging.DEBUG)
+from tools.summarizer_tool import SummarizerTool
 
 
 class Summarizer:
-    """Combine research pieces into an interpretable summary."""
-
     def __init__(self):
-        pass
+        self.summarizer = SummarizerTool()
 
-    def summarize(self, pieces: List[Dict[str, Any]]) -> str:
-        logger.debug("Summarizer: summarizing %d pieces", len(pieces))
+    def summarize(self, research_results: list) -> str:
+        """Summarizes all research results into one combined text."""
+        combined = ""
 
-        extracted = []
-        for p in pieces:
-            first = ""
+        for p in research_results:
             if "top_results" in p and len(p["top_results"]) > 0:
-                first = p["top_results"][0]
-            else:
-                first = "(missing research data)"
-            extracted.append(first)
+                combined += f"Research for query: {p['query']}\n"
+                for r in p["top_results"]:
+                    combined += f"- {r}\n"
+                combined += "\n"
 
-        summary = " | ".join(extracted)
-        final = f"Summary: {summary}"
+        if not combined.strip():
+            combined = "No meaningful research found."
 
-        logger.debug("Summarizer: summary produced")
-        return final
+        return self.summarizer.summarize(combined)
+
+    def summarize_research(self, research_results: list) -> str:
+        return self.summarize(research_results)

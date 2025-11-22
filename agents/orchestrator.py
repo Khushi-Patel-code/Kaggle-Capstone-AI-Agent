@@ -47,28 +47,35 @@ class Orchestrator:
         if prior_plan:
             self.log("Found prior plan. Including context into planning step.")
 
-        plan = self.planner.create_plan(user_goal, previous_plan=prior_plan)
+        # FIX: Your planner uses plan(), not create_plan()
+        plan = self.planner.plan(user_goal)
         self.remember("last_plan", plan)
         self.log("Plan created.")
 
         # 2. RESEARCH ---------------------------------------------------
         self.log("Searching the web for supporting material...")
-        research_results = self.researcher.research_topics(plan)
+
+        # FIX: research_topics() does NOT exist → replace with research(plan)
+        research_results = self.researcher.research(plan)
+
         self.remember("last_research", str(research_results))
         self.log("Research complete.")
 
-        # 3. SUMMARIZATION -----------------------------------------------
+        # 3. SUMMARIZATION ---------------------------------------------
         self.log("Summarizing the research...")
-        summary = self.summarizer.summarize_research(research_results)
+
+        # FIX: summarize_research() does NOT exist → replace with summarize()
+        summary = self.summarizer.summarize(research_results)
+
         self.remember("last_summary", summary)
         self.log("Summary complete.")
 
-        # 4. COACHING ----------------------------------------------------
+        # 4. COACHING ---------------------------------------------------
         self.log("Generating coaching insights...")
         final_output = self.coach.generate_advice(plan, summary)
         self.remember("last_output", final_output)
         self.log("Coaching step complete.")
 
-        # 5. FINISH ------------------------------------------------------
+        # 5. FINISH -----------------------------------------------------
         self.log("Mission complete.")
         return final_output

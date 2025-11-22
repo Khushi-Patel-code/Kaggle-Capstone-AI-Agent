@@ -1,46 +1,38 @@
 """
 agents/research.py
-Research agent for the orchestrator.
-
-Right now this uses a mock "search" and returns structured results.
-Later you can integrate:
- - Google Custom Search JSON API
- - Kaggle datasets
- - academic APIs
- - ADK tools
+Handles searching using GoogleSearchTool.
+Returns structured results, not raw strings.
 """
 
-import logging
-import time
-from typing import Dict, Any
-
-logger = logging.getLogger("researcher")
-logger.setLevel(logging.DEBUG)
+from tools.google_search_tool import GoogleSearchTool
 
 
 class Researcher:
-    """Research agent that fetches information for a given query."""
+    """Runs research queries using the google search tool."""
 
-    def __init__(self, latency: float = 0.6):
-        self.latency = latency
+    def __init__(self):
+        self.search_tool = GoogleSearchTool()
 
-    def research(self, query: str) -> Dict[str, Any]:
-        logger.debug("Researcher: researching query: %s", query)
+    def research(self, query: str):
+        """Return structured search result for ONE query."""
+        results = self.search_tool.search(query)
 
-        # simulated delay (replace with real search later)
-        time.sleep(self.latency)
-
-        # simple structured result
-        result = {
+        return {
             "query": query,
-            "top_results": [
-                f"Top insight for '{query}' (mock source)",
-                f"Additional supporting detail for '{query}'"
-            ],
-            "extra": {
-                "confidence": 0.85
-            }
+            "top_results": results,
         }
 
-        logger.debug("Researcher: completed research for query: %s", query)
-        return result
+    def research_topics(self, plan_steps: list):
+        """
+        Takes a plan (list of steps), runs research only for 'research' steps,
+        and returns a LIST of structured dicts.
+        """
+
+        structured_results = []
+
+        for step in plan_steps:
+            if step["type"] == "research":
+                res = self.research(step["query"])
+                structured_results.append(res)
+
+        return structured_results
