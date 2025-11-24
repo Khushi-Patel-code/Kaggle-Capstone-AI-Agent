@@ -4,7 +4,7 @@ from agents.planner import Planner
 from agents.research import Researcher
 from agents.summarizer import Summarizer
 from agents.coach import Coach
-
+from agents.timetable import TimetableAgent
 from services.memory_service import MemoryService
 from services.session_service import SessionService
 
@@ -24,6 +24,7 @@ def main():
         researcher=Researcher(),
         summarizer=Summarizer(),
         coach=Coach(),
+        timetable=TimetableAgent(),
         memory=memory,
         session=session
     )

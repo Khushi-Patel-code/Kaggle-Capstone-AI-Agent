@@ -1,21 +1,3 @@
-"""
-agents/coach.py
-Produces the final user-facing result.
-
-This agent converts:
- - plan
- - summary
- - mission
-
-into a final structured output.
-
-In the real version, you may:
- - generate a weekly study plan
- - produce a formatted report
- - generate tips, pitfalls, metrics, checklists
- - include memory personalization
-"""
-
 import logging
 from typing import List, Dict, Any
 
@@ -26,26 +8,53 @@ logger.setLevel(logging.DEBUG)
 class Coach:
     """Transform the orchestrator output into final guidance for the user."""
 
-    def __init__(self):
-        pass
+    def __init__(self, llm=None):
+        self.llm = llm  # Optional, for LLM-generated coaching
 
-    def create_output(
-        self, mission: str, plan: List[Dict[str, Any]], summary: str
-    ) -> Dict[str, Any]:
-
+    # -------------------------------------------------------------------------
+    # REQUIRED METHOD → Orchestrator will call this
+    # -------------------------------------------------------------------------
+    def create_output(self, mission: str, plan: List[Dict[str, Any]], summary: str) -> Dict[str, Any]:
         logger.debug("Coach: creating final output for mission='%s'", mission)
 
-        output = {
+        # Generate human-readable plan list
+        explained_steps = []
+        for i, step in enumerate(plan):
+            readable = step.get("query") or step.get("type") or str(step)
+            explained_steps.append(f"Step {i+1}: {readable}")
+
+        # OPTIONAL: If using LLM coaching
+        if self.llm:
+            prompt = f"""
+            Create a study-friendly output.
+
+            User goal:
+            {mission}
+
+            Study Plan:
+            {plan}
+
+            Summary of research:
+            {summary}
+
+            Produce:
+            - Study guidance
+            - A helpful timetable suggestion
+            - Motivation line
+            - Important notes
+            """
+            coaching_message = self.llm(prompt)
+        else:
+            coaching_message = (
+                f"For the mission '{mission}', follow the steps above. "
+                "Focus on the important concepts from the summary. "
+                "Stay consistent and track your daily progress!"
+            )
+
+        # FINAL STRUCTURED OUTPUT (sent back to main.py)
+        return {
             "mission": mission,
             "summary": summary,
-            "steps_explained": [
-                f"Step {i+1}: {step['type']} - {step.get('query', step.get('child_steps'))}"
-                for i, step in enumerate(plan)
-            ],
-            "action_recommendation": (
-                f"For this mission ('{mission}'), follow the above plan. "
-                f"Focus on: {summary[:180]}"
-            ),
+            "steps_explained": explained_steps,
+            "coaching": coaching_message,
         }
-
-        return output

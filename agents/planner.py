@@ -1,61 +1,56 @@
-"""
-agents/planner.py
-Creates a multi-step plan for the mission.
+# agents/planner.py
 
-The Planner outputs a list of steps.
-Each step is a dict with required keys:
-  - step_id (str)
-  - type ("research" or "summarize")
-  - query (for research)
-  - child_steps (for summarize)
-"""
-
-import logging
-import uuid
+from datetime import datetime, timedelta
 from typing import List, Dict, Any
 
-logger = logging.getLogger("planner")
-logger.setLevel(logging.DEBUG)
-
-
 class Planner:
-    """Generate a structured plan for the orchestrator."""
+    """Creates a practical, real-world study plan."""
 
-    def __init__(self):
-        pass
+    def plan(self, goal: str, previous_plan=None) -> List[Dict[str, Any]]:
+        
+        # Example: goal = "Exam on 15 Dec"
+        
+        plan = []
 
-    def _new_step_id(self) -> str:
-        return "s_" + uuid.uuid4().hex[:6]
+        # 1. Extract exam date (optional — if user gives a date)
+        exam_date = None
+        for word in goal.split():
+            if word.isdigit() and len(word) == 2:
+                try:
+                    exam_date = datetime(datetime.now().year, datetime.now().month, int(word))
+                except:
+                    pass
+        
+        # If date missing, assume 7-day preparation
+        total_days = 7 if not exam_date else (exam_date - datetime.now()).days
+        
+        subjects = ["Maths", "Reasoning", "English", "GK"]  # You can also make it dynamic
+        
+        # 2. Generate daily tasks
+        for i in range(total_days):
+            day_plan = {
+                "day": f"Day {i + 1}",
+                "tasks": [
+                    f"Study {subjects[i % len(subjects)]} for 2 hours",
+                    "Practice 20 questions",
+                    "Revise notes for 30 minutes",
+                ]
+            }
+            plan.append(day_plan)
 
-    def plan(self, mission: str, previous_plan=None) -> List[Dict[str, Any]]:
-        """
-        Create a multi-step plan.
-        Includes memory context if previous_plan is provided.
-        """
+        # 3. Add final revision day
+        plan.append({
+            "day": "Final Revision",
+            "tasks": [
+                "Give full mock test",
+                "Analyze mistakes",
+                "Revise weak topics"
+            ]
+        })
 
-        logger.debug("Planner: creating plan for mission: %s", mission)
+        return [
+    {"type": "research", "query": f"Best way to prepare for {goal} exam"},
+    {"type": "study", "query": f"Important topics for {goal} exam"},
+    {"type": "revision", "query": f"Revision plan for {goal} exam"}
+]
 
-        context_note = ""
-        if previous_plan:
-            context_note = " (using past session knowledge)"
-
-        s1 = {
-            "step_id": self._new_step_id(),
-            "type": "research",
-            "query": f"General overview and background for: {mission}{context_note}",
-        }
-        s2 = {
-            "step_id": self._new_step_id(),
-            "type": "research",
-            "query": f"Important methods, techniques, challenges related to: {mission}{context_note}",
-        }
-        s3 = {
-            "step_id": self._new_step_id(),
-            "type": "summarize",
-            "child_steps": [s1["step_id"], s2["step_id"]],
-        }
-
-        plan = [s1, s2, s3]
-        logger.debug("Planner: plan created with %d steps", len(plan))
-
-        return plan
