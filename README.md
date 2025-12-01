@@ -1,6 +1,9 @@
 # 🧠 AI Learning Coach: The Personalized Study Planner Agent
+### Concierge Agents
 
-**Khushi Patel | Aadhya Patel | Competition Track: **
+##
+### Khushi Patel 
+### Aadhya Patel
 
 
 
