@@ -3,11 +3,8 @@
 import requests
 
 class GoogleSearchTool:
-    """
-    A simple fallback search tool that returns STRUCTURED results.
-    We DO NOT call Google API (Kaggle does not allow).
-    Instead, we simulate search by returning stubbed structured results.
-    """
+    """Simulates a search engine tool, returning structured, stubbed results for 
+    local testing and competition constraints (e.g., no live API calls)."""
 
     def search(self, query: str):
         """

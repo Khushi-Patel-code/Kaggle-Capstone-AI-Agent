@@ -1,15 +1,16 @@
 # services/session_service.py
 
+"""
+Tracks project session info such as:
+- session ID
+- timestamps
+- user query history
+"""
+
 import uuid
 from datetime import datetime
 
 class SessionService:
-    """
-    Tracks project session info such as:
-    - session ID
-    - timestamps
-    - user query history
-    """
 
     def __init__(self):
         self.session_id = str(uuid.uuid4())

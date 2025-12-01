@@ -1,4 +1,1 @@
-google-generativeai
-httpx
-python-dotenv
-retrying
+requests

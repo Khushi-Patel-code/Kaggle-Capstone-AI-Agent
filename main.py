@@ -39,7 +39,14 @@ def main():
     print("\n==============================")
     print("         FINAL OUTPUT")
     print("==============================\n")
-    print(result)
+
+    for key, value in result.items():
+        print(f"\n----- {key.upper()} -----")
+        if isinstance(value, (dict, list)):
+            import json
+            print(json.dumps(value, indent=2))
+        else:
+            print(value)
 
     print("\n==============================")
     print("      SESSION INFORMATION")

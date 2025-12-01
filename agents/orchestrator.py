@@ -30,14 +30,11 @@ class Orchestrator:
             return self.memory.get(key)
         return None
 
-    # -------------------------------------------------------------
-    # MAIN PIPELINE
-    # -------------------------------------------------------------
     def run_mission(self, user_goal: str) -> str:
         self.log(f"Mission started for goal: '{user_goal}'")
         self.remember("last_goal", user_goal)
 
-        # 1. PLANNING ---------------------------------------------------
+        # 1. PLANNING
         self.log("Generating study plan...")
         prior_plan = self.recall("last_plan")
         if prior_plan:
@@ -47,27 +44,37 @@ class Orchestrator:
         self.remember("last_plan", plan)
         self.log("Plan created.")
 
-        # 2. RESEARCH ---------------------------------------------------
+        # 2. RESEARCH
         self.log("Searching the web for supporting material...")
-        research_results = self.researcher.research(plan)
+        research_results = self.researcher.research_topics(plan)
         self.remember("last_research", str(research_results))
         self.log("Research complete.")
 
-        # 3. SUMMARIZATION ---------------------------------------------
+        # 3. SUMMARIZATION
         self.log("Summarizing the research...")
         summary = self.summarizer.summarize(research_results)
         self.remember("last_summary", summary)
         self.log("Summary complete.")
 
-        # 4. COACHING ---------------------------------------------------
+        # 4. COACHING 
         self.log("Generating coaching insights...")
         final_output = self.coach.create_output(user_goal, plan, summary)
         self.remember("last_output", final_output)
         self.log("Coaching step complete.")
 
-        # ---------------------------------------------------------------
-        # 5. TIMETABLE GENERATION  <-- ADD THIS WHOLE BLOCK
-        # ---------------------------------------------------------------
+        # 5. FORMAT PLAN STEPS 
+        steps_explained = []
+        for i, step in enumerate(plan, start=1):
+            if isinstance(step, dict) and "day" in step:
+                day_tasks = ", ".join(step.get("tasks", []))
+                steps_explained.append(f"Step {i}: {step['day']} --> {day_tasks}")
+            elif isinstance(step, dict) and step.get("type") == "research":
+                steps_explained.append(f"Step {i}: {step['query']}")
+            else:
+                steps_explained.append(f"Step {i}: {step}")
+        final_output["steps_explained"] = steps_explained
+
+        # 6. TIMETABLE GENERATION 
         if self.timetable:
             self.log("Generating personalized timetable...")
 
@@ -92,6 +99,5 @@ class Orchestrator:
         else:
             self.log("No timetable agent available. Skipping timetable step.")
 
-        # 6. FINISH -----------------------------------------------------
         self.log("Mission complete.")
         return final_output
