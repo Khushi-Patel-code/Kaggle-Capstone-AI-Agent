@@ -1,9 +1,11 @@
-# AI Learning Coach: The Personalized Study Planner Agent
+# Academic & Productivity Multi-Agent Assistant for Students
 ### Concierge Agents
 
-##
-### Khushi Patel 
-### Aadhya Patel
+## Team name: 404 Found
+
+### Team members:
+**Khushi Patel**
+**Aadhya Patel**
 
 
 
