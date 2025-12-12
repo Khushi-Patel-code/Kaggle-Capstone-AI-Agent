@@ -154,6 +154,13 @@ Kaggle-Capstone-AI-Agent/
 - User availability (`free_slots`) is currently hard-coded
 - No persistent storage beyond in-memory session lifetime
 
+### Future Enhancements
+- Integrate real web search APIs
+- Add user profiles and long-term memory
+- Introduce adaptive difficulty based on performance
+- Add reminder & notification agent
+- Web or GUI-based interface
+
 ## 👥 Authors (Team: 404 Found)
 
 - Khushi Patel
