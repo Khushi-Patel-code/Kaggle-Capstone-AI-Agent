@@ -147,6 +147,13 @@ Kaggle-Capstone-AI-Agent/
         └── summarizer_tool.cpython-313.pyc
 ```
 
+## ⚠️ 8. Limitations & Future Work
+
+### Current Limitations
+- Research is performed using a simulated search tool
+- User availability (`free_slots`) is currently hard-coded
+- No persistent storage beyond in-memory session lifetime
+
 ## 👥 Authors (Team: 404 Found)
 
 - Khushi Patel
