@@ -1,5 +1,6 @@
 # Academic & Productivity Multi-Agent Assistant for Students
 ### Concierge Agents
+### Kaggle Capstone
 
 ## Team name: 404 Found
 
@@ -58,8 +59,8 @@ You must have Python 3.x installed.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/Khushi-Patel-code/Kaggle-Capstone-AI-Agent#
-    cd Kaggle-Capstone-AI-Agent
+    git clone https://github.com/Khushi-Patel-code/AI-learning-coach-kaggle-capstone#
+    cd AI-learning-coach-kaggle-capstone
     ```
 
 2.  **Install Dependencies:**
