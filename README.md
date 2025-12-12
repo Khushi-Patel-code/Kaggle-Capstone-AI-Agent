@@ -59,7 +59,7 @@ You must have Python 3.x installed.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/Khushi-Patel-code/AI-learning-coach-kaggle-capstone#
+    git clone https://github.com/Khushi-Patel-code/AI-learning-coach-kaggle-capstone
     cd AI-learning-coach-kaggle-capstone
     ```
 
